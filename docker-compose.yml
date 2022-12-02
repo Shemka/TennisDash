@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./server
+    command: uvicorn project.simple_api:app --host 0.0.0.0 --port 5000
+    volumes:
+      - ./server/:/server/
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+  db:
+    image: mcekovic/uts-database
+    ports:
+      - 5432:5432
