@@ -10,6 +10,12 @@ router = APIRouter()
 async def get_player_time_stats(player_id: Union[str, None] = None, limit: Union[str, None] = None): 
     """
     Возвращает изменение рейтинга игроков
+
+    Дополнительные параметры:
+    player_id: int
+        айди игрока для которого нужно получить статистику;
+    limit: int
+        количество записей которые нужно вернуть.
     """
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     cursor = conn.cursor()
@@ -32,7 +38,13 @@ async def get_player_time_stats(player_id: Union[str, None] = None, limit: Union
 @router.get("/getDetailedPlayerTimeStats")
 async def get_det_player_time_stats(player_id: Union[str, None] = None, limit: Union[str, None] = None): 
     """
-    Возвращает изменение подробного рейтинга игроков
+    Возвращает изменение подробного рейтинга игроков.
+    
+    Дополнительные параметры:
+    player_id: int
+        айди игрока для которого нужно получить статистику;
+    limit: int
+        количество записей которые нужно вернуть.
     """
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     cursor = conn.cursor()

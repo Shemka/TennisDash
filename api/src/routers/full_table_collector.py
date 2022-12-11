@@ -8,6 +8,15 @@ router = APIRouter()
 
 @router.get("/getTable/{table_name}")
 async def get_any_table(table_name: str, offset: Union[str, None] = None, limit: Union[str, None] = None): 
+    """
+    Возвращает всю табличку `table_name` из БД.
+
+    Дополнительные параметры:
+    offset: int
+        номер строки с которой нужно начать;
+    limit: int
+        количество записей которые нужно вернуть.
+    """
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     cursor = conn.cursor()
     cursor.execute("".join([
