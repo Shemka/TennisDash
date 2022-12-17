@@ -163,7 +163,7 @@ async def get_level():
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     cursor = conn.cursor()
     cursor.execute("".join(
-        "SELECT level, COUNT(winner_id) FROM player_match_stats_v GROUP BY 1;"))
+        "SELECT level, COUNT(level) FROM player_match_stats_v GROUP BY 1;"))
     columns = [desc[0] for desc in cursor.description]
     records = cursor.fetchall()
     conn.close()
