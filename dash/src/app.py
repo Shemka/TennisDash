@@ -29,16 +29,16 @@ print(df.head())
 print(os.listdir())
 app.layout = html.Div([
     html.Div([
-        html.Label(['Analysis of tennis players']),
+        html.H2(['Analysis of tennis players']),
         dcc.Dropdown(
             id='my_dropdown',
             options=[
-                {'label': 'Player_titles', 'value': 'titles'},
-                {'label': 'Player_hand', 'value': 'hand'},
-                {'label': 'Quantity_by_country', 'value': 'country_id'},
-                {'label': 'Winners_age', 'value': 'age'},
-                {'label': 'Match_minutes', 'value': 'minutes'},
-                {'label': 'Player_level', 'value': 'level'}
+                {'label': 'Player titles', 'value': 'titles'},
+                {'label': 'Player hand', 'value': 'hand'},
+                {'label': 'Сountry', 'value': 'country_id'},
+                {'label': 'Winners age', 'value': 'age'},
+                {'label': 'Match time', 'value': 'minutes'},
+                {'label': 'Player level', 'value': 'level'}
             ],
             multi=False,
             clearable=False,
