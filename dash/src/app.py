@@ -21,7 +21,9 @@ df_4.rename(columns = {'round':'age'}, inplace = True)
 print(df_4)
 df_5 = pd.DataFrame.from_records(requests.get("http://api:5000/getLevel", params={'limit': 10}).json()["data"])
 print(df_5)
-df = pd.concat([df_1, df_2, df_3, df_4], axis=1)
+df_6 = pd.DataFrame.from_records(requests.get("http://api:5000/getQuantityByCountry", params={'limit': 10}).json()["data"])
+print(df_6)
+df = pd.concat([df_1, df_2, df_3, df_4, df_5, df_6], axis=1)
 print(df.head())
 
 print(os.listdir())
@@ -31,12 +33,12 @@ app.layout = html.Div([
         dcc.Dropdown(
             id='my_dropdown',
             options=[
-                {'label': 'Get titles', 'value': 'titles'},
-                {'label': 'getHand', 'value': 'hand'},
-                {'label': 'getQuantityByCountry', 'value': 'quantityByCountry'},
-                {'label': 'getAgeWinners', 'value': 'age'},
-                {'label': 'getMinutesMatch', 'value': 'minutes'},
-                {'label': 'getLevel', 'value': 'lvl'}
+                {'label': 'Player_titles', 'value': 'titles'},
+                {'label': 'Player_hand', 'value': 'hand'},
+                {'label': 'Quantity_by_country', 'value': 'country_id'},
+                {'label': 'Winners_age', 'value': 'age'},
+                {'label': 'Match_minutes', 'value': 'minutes'},
+                {'label': 'Player_level', 'value': 'level'}
             ],
             multi=False,
             clearable=False,
