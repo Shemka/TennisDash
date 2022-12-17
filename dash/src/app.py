@@ -6,30 +6,42 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
 import os
-
-print(os.listdir())
-df = pd.read_csv("src/Urban_Park_Ranger_Animal_Condition_Response.csv")
+import requests
 
 app = dash.Dash(__name__)
 server = app.server
+df_1 = pd.DataFrame.from_records(requests.get("http://api:5000/getHand", params={'limit': 10}).json()["data"])
+print(df_1)
+df_2=pd.DataFrame.from_records(requests.get("http://api:5000/getMinutesMatch", params={'limit': 10}).json()["data"])
+print(df_2)
+df_3 = pd.DataFrame.from_records(requests.get("http://api:5000/getTitles", params={'limit': 10}).json()["data"])
+print(df_3)
+df_4 = pd.DataFrame.from_records(requests.get("http://api:5000/getAgeWinners", params={'limit': 10}).json()["data"])
+df_4.rename(columns = {'round':'age'}, inplace = True)
+print(df_4)
+df_5 = pd.DataFrame.from_records(requests.get("http://api:5000/getLevel", params={'limit': 10}).json()["data"])
+print(df_5)
+df = pd.concat([df_1, df_2, df_3, df_4], axis=1)
+print(df.head())
 
+print(os.listdir())
 app.layout = html.Div([
     html.Div([
         html.Label(['Analysis of tennis players']),
         dcc.Dropdown(
             id='my_dropdown',
             options=[
-                {'label': 'Action Taken by Ranger', 'value': 'Final Ranger Action'},
-                {'label': 'Age', 'value': 'Age'},
-                {'label': 'Animal Health', 'value': 'Animal Condition'},
-                {'label': 'Borough', 'value': 'Borough'},
-                {'label': 'Species', 'value': 'Animal Class'},
-                {'label': 'Species Status', 'value': 'Species Status'}
+                {'label': 'Get titles', 'value': 'titles'},
+                {'label': 'getHand', 'value': 'hand'},
+                {'label': 'getQuantityByCountry', 'value': 'quantityByCountry'},
+                {'label': 'getAgeWinners', 'value': 'age'},
+                {'label': 'getMinutesMatch', 'value': 'minutes'},
+                {'label': 'getLevel', 'value': 'lvl'}
             ],
-            value='Animal Class',
             multi=False,
             clearable=False,
             style={"width": "50%"}
+
         ),
     ]),
 
@@ -51,5 +63,5 @@ def update_graph(my_dropdown):
     return px.pie(data_frame=dff, names=my_dropdown, hole=0.3, )
 
 
-if __name__ == '__main__':
-    app.run_server(debug=True, host="0.0.0.0", port="8050")
+
+
