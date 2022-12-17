@@ -6,28 +6,28 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/getAge")
-async def get_age(limit: Union[str, None] = None):
-    """
-    Возвращает фамилию и возраст из БД.
-
-    Дополнительные параметры:
-    limit: int
-        количество записей которые нужно вернуть.
-    """
-    conn = psycopg2.connect(os.environ["DATABASE_URL"])
-    cursor = conn.cursor()
-    cursor.execute("".join(
-        ["SELECT last_name, age FROM player_v WHERE age IS NOT NULL AND active='True'",
-         f" LIMIT {limit}" if limit else ""]))
-
-    columns = [desc[0] for desc in cursor.description]
-    records = cursor.fetchall()
-    conn.close()
-    cursor.close()
-    return {
-        "data": [dict(zip(columns, record)) for record in records]
-    }
+# @router.get("/getAge")
+# async def get_age(limit: Union[str, None] = None):
+#     """
+#     Возвращает фамилию и возраст из БД.
+#
+#     Дополнительные параметры:
+#     limit: int
+#         количество записей которые нужно вернуть.
+#     """
+#     conn = psycopg2.connect(os.environ["DATABASE_URL"])
+#     cursor = conn.cursor()
+#     cursor.execute("".join(
+#         ["SELECT last_name, age FROM player_v WHERE age IS NOT NULL AND active='True'",
+#          f" LIMIT {limit}" if limit else ""]))
+#
+#     columns = [desc[0] for desc in cursor.description]
+#     records = cursor.fetchall()
+#     conn.close()
+#     cursor.close()
+#     return {
+#         "data": [dict(zip(columns, record)) for record in records]
+#     }
 
 
 @router.get("/getTitles")
@@ -82,9 +82,8 @@ async def get_hand(limit: Union[str, None] = None):
 @router.get("/getQuantityByCountry")
 async def get_quantity(limit: Union[str, None] = None):
     """
-    Возвращает фамилию и рабочую руку из БД.
-    R - правая
-    L - левая
+    Возвращает буквенный код страны и количество игроков из БД в порядке убывания.
+
     Дополнительные параметры:
     limit: int
         количество записей которые нужно вернуть.
@@ -92,7 +91,7 @@ async def get_quantity(limit: Union[str, None] = None):
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     cursor = conn.cursor()
     cursor.execute("".join(
-        ["SELECT last_name, hand FROM player WHERE hand IS NOT NULL",
+        ["SELECT country_id, COUNT(player_id) FROM player WHERE country_id IS NOT NULL GROUP BY 1 ORDER BY 2 DESC",
          f" LIMIT {limit}" if limit else ""]))
 
     columns = [desc[0] for desc in cursor.description]
@@ -163,7 +162,7 @@ async def get_level():
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     cursor = conn.cursor()
     cursor.execute("".join(
-        "SELECT level, COUNT(level) FROM player_match_stats_v GROUP BY 1;"))
+        "SELECT level, COUNT(level) FROM player_match_stats_v GROUP BY 1"))
     columns = [desc[0] for desc in cursor.description]
     records = cursor.fetchall()
     conn.close()
